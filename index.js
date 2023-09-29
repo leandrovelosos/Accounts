@@ -8,7 +8,7 @@ function operation(){
         name: 'action',
         message: 'O que você deseja fazer?',
         choices:[
-            'Cria conta',
+            'Criar conta',
             'Consultar saldo',
             'Depositar',
             'Sacar',
@@ -17,10 +17,18 @@ function operation(){
 
     }]).then((result) => {
         const action = result['action']
-        console.log(action)
+        if(action == 'Criar conta'){
+            createAccount()
+        }
     }).catch((err) => {
         console.log(err)
     });
 }
 
 operation()
+
+//criando conta
+function createAccount(){
+    console.log(chalk.bgGreen.black('Parabéns por escolher o nosso banco!!'))
+    console.log(chalk.green('Defina as opções da sua conta a seguir'))
+}
