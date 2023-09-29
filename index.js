@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import chalk from 'chalk';
+import chalk, { Chalk } from 'chalk';
 import fs from 'fs';
 
 function operation(){
@@ -22,7 +22,7 @@ function operation(){
         } else if(action == 'Consultar saldo'){
 
         } else if(action == 'Depositar'){
-
+            depositar()
         } else if(action == 'Sacar'){
 
         } else if(action == 'Sair'){
@@ -77,4 +77,31 @@ function buildAccount(){
     }).catch((err) => {
         
     });
+}
+
+//adicionar um valor à conta do usuário
+function depositar(){
+    inquirer.prompt([{
+        name: 'accountName',
+        message: 'Qual o nome da conta?'
+    }
+    ]).then((result) => {
+       const accountName = result['accountName']
+
+       //verificando se a conta existe 
+       if(!checkAccount(accountName)){
+            return depositar()
+       }
+    }).catch((err) => {
+        console.log(err)
+    });
+}
+
+function checkAccount(accountName){
+    if(!fs.existsSync(`accounts/${accountName}.json`)){
+        console.log(chalk.bgRed.black('Esta conta não existe, escolha outra'))
+        return false 
+    }
+
+    return true
 }
