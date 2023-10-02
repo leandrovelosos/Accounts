@@ -220,11 +220,45 @@ function withdraw(){
   .then((result)=>{
     const amount = result['pergunta']
 
-    console.log(amount)
-    operation()
+    //remove o dinheiro
+    removeAmount(accountName, amount)
 
   })
   .catch((err) => console.log(err))
   })
   .catch((err) => console.log(err))
+}
+
+//funcao remove dinheiro
+
+function removeAmount(accountName, amount){
+
+    const accountData = getAccount(accountName)
+
+    if(!amount){
+      console.log(
+        chalk.bgRed.black('Ocorreu um erro, tente novamente mais tarde')
+      )
+      return withdraw()
+    }
+
+    if(accountData.balance < amount){
+      console.log(
+        chalk.bgRed.black('Valor indisponível')
+      )
+      return withdraw()
+    }
+
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount)
+
+    fs.writeFileSync(
+      `accounts/${accountName}.json`,
+      JSON.stringify(accountData),
+      function(err){
+        console.log(err)
+      }
+    )
+
+    console.log(chalk.green(`Foi realizado um saque de R$${amount} da sua conta`))
+    operation()
 }
